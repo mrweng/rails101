@@ -1,6 +1,6 @@
 class GroupsController < ApplicationController
 	
-	before_action :authenticate_user!, only: [:destroy]
+	before_action :authenticate_user!
 
 	def index
 		@groups = Group.all
@@ -16,11 +16,11 @@ class GroupsController < ApplicationController
 	end
 
 	def edit
-		@group = Group.find(params[:id])
+		@group = current_user.groups.find(params[:id])
 	end
 
 	def create
-		@group = Group.new(group_params)
+		@group = current_user.groups.new(group_params)
 
 		if @group.save
 			redirect_to groups_path
@@ -30,7 +30,7 @@ class GroupsController < ApplicationController
 	end
 
 	def update
-		@group = Group.find(params[:id])
+		@group = current_user.groups.find(params[:id])
 
 		if @group.update(group_params)
 			redirect_to groups_path, notice: "Edit complete!"
@@ -40,7 +40,7 @@ class GroupsController < ApplicationController
 	end
 
 	def destroy
-		@group = Group.find(params[:id])
+		@group = current_user.groups.find(params[:id])
 		@group.destroy
 		redirect_to groups_path, alert: "Topic Deleted!"
 	end
